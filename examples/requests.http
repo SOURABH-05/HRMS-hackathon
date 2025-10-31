@@ -1,0 +1,112 @@
+### Base
+@base = http://localhost:5000/api
+@token = {{login.response.body.$.token}}
+
+### Health
+GET {{base}}/health
+
+### Register
+# @name register
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Admin User",
+  "email": "admin@test.com",
+  "password": "pass123",
+  "role": "admin"
+}
+
+### Login
+# @name login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@test.com",
+  "password": "pass123"
+}
+
+### Employees (paginated)
+GET {{base}}/employees?page=1&limit=10
+Authorization: Bearer {{token}}
+
+### Seed note:
+# You can run `npm run seed` in server to create 50 employees,
+# then copy one employee _id below for the following requests.
+
+### Attendance clock-in
+POST {{base}}/attendance/clock-in
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "employeeId": "<EMPLOYEE_ID>"
+}
+
+### Attendance clock-out
+POST {{base}}/attendance/clock-out
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "employeeId": "<EMPLOYEE_ID>"
+}
+
+### Payroll - get
+GET {{base}}/payroll/<EMPLOYEE_ID>
+Authorization: Bearer {{token}}
+
+### Payroll - update
+PUT {{base}}/payroll/<EMPLOYEE_ID>
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "basePay": 60000,
+  "allowances": 5000,
+  "tax": 8000
+}
+
+### Performance - list
+GET {{base}}/performance/<EMPLOYEE_ID>
+Authorization: Bearer {{token}}
+
+### Performance - add
+POST {{base}}/performance/<EMPLOYEE_ID>
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "period": "2025-Q4",
+  "rating": 8,
+  "notes": "Strong delivery"
+}
+
+### Leave - apply (employee)
+POST {{base}}/leave/apply
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "employeeId": "<EMPLOYEE_ID>",
+  "type": "Casual",
+  "from": "2025-11-05",
+  "to": "2025-11-07",
+  "notes": "Family"
+}
+
+### Leave - list (admin/manager see all)
+GET {{base}}/leave
+Authorization: Bearer {{token}}
+
+### Leave - approve (admin/manager)
+POST {{base}}/leave/<EMPLOYEE_ID>/0/approve
+Authorization: Bearer {{token}}
+
+### Leave - reject (admin/manager)
+POST {{base}}/leave/<EMPLOYEE_ID>/0/reject
+Authorization: Bearer {{token}}
+
+### AI Resume - upload (use a client; .http cannot send multipart easily)
+# Endpoint: POST {{base}}/recruit/resume (form-data: resume=<file>)

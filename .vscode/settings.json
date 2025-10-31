@@ -1,0 +1,11 @@
+{
+	"files.associations": {
+		"*.css": "postcss"
+	},
+	"css.lint.unknownAtRules": "ignore",
+	"tailwindCSS.includeLanguages": {
+		"typescriptreact": "html",
+		"javascriptreact": "html"
+	},
+	"tailwindCSS.experimental.configFile": "client/tailwind.config.js"
+}
